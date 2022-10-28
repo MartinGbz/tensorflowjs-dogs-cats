@@ -1,0 +1,21 @@
+body {
+    background-color: black;
+}
+
+div {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin-bottom: 20px;
+}
+
+img {
+    width: 400px;
+}
+
+p {
+    color: white;
+}
