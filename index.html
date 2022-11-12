@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <header>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="styles.css">
         <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
@@ -9,11 +10,22 @@
         <script type="text/javascript" src="computing.js"></script>
     </header>
     <body>
+        <p> Unique prediction </p>
         <div>
             <input type="file" id="file-upload"/>
             <img id="cur-img">
             <!-- <script type="module" src="index.js"></script> -->
         </div>
+        <hr/>
+        <p> Multiple predictions (dogs) </p>
+        <div>
+            <input type="file" id="directory-upload" webkitdirectory multiple>
+        </div>
+        <p> Multiple predictions (cats) </p>
+        <div>
+            <input type="file" id="directory-upload-cat" webkitdirectory multiple>
+        </div>
         <p id="result"></p>
+        <button onclick="runAccuracy()">Run accuracy</button>
     </body>
 </html>
