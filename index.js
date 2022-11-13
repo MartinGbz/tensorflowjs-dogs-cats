@@ -8,6 +8,11 @@
 // }
 
 var scores = [];
+var loadModelTimes = [];
+var preprocessImageTimes = [];
+var predictTimes = [];
+var preprocessImageAndloadModelTimes = [];
+var data = [];
 
 window.onload = function afterWebPageLoad() {
     let uploadBtn = document.getElementById("directory-upload");
@@ -26,18 +31,20 @@ window.onload = function afterWebPageLoad() {
             console.log(image);
             cur = document.createElement('img')
             cur.src = URL.createObjectURL(image);
-            score = await predictImg(cur);
-            console.log("avant : score")
-            console.log(score)
+            data = await predictImg(cur);
 
-            console.log("après : score")
-            console.log(score)
-            // console.log("score");
-            // console.log(score);
-            scores.push(score);
+            scores.push(data[0]);
+            loadModelTimes.push(data[1]);
+            preprocessImageTimes.push(data[2]);
+            predictTimes.push(data[3]);
+            preprocessImageAndloadModelTimes.push(data[2]+data[3]);
         }
         console.log("scores")
         console.log(scores)
+        console.log(loadModelTimes)
+        console.log(preprocessImageTimes)
+        console.log(predictTimes)
+        console.log(preprocessImageAndloadModelTimes)
     }, false);
 
 
@@ -47,30 +54,69 @@ window.onload = function afterWebPageLoad() {
             console.log(image);
             cur = document.createElement('img')
             cur.src = URL.createObjectURL(image);
-            score = await predictImg(cur);
-            console.log("avant : score")
-            console.log(score)
+            data = await predictImg(cur);
 
-            score = 1 - score;
+            // score = 1 - score;
 
-            console.log("après : score")
-            console.log(score)
-
-            scores.push(score);
+            scores.push(1-data[0]);
+            loadModelTimes.push(data[1]);
+            preprocessImageTimes.push(data[2]);
+            predictTimes.push(data[3]);
+            preprocessImageAndloadModelTimes.push(data[2]+data[3]);
         }
         console.log("scores")
         console.log(scores)
     }, false);
 }
-function computeAccuracy1(scores){
+
+function computeAccuracy1(){
+    var returnedArray = [];
+    
     var sum = 0;
+
+    console.log("computeAccuracy1")
+    console.log(scores)
+    console.log(loadModelTimes)
+    console.log(preprocessImageTimes)
+    console.log(predictTimes)
+    console.log(preprocessImageAndloadModelTimes)
+
     scores.forEach(score => {
         sum = sum + score;
     });
-    return sum/scores.length;
+    returnedArray.push(sum/scores.length);
+    sum = 0;
+
+    loadModelTimes.forEach(time => {
+        sum = sum + time;
+    });
+    returnedArray.push(sum/loadModelTimes.length);
+    sum = 0;
+
+    preprocessImageTimes.forEach(time => {
+        sum = sum + time;
+    });
+    returnedArray.push(sum/preprocessImageTimes.length);
+    sum = 0;
+
+    predictTimes.forEach(time => {
+        sum = sum + time;
+    });
+    returnedArray.push(sum/predictTimes.length);
+    sum = 0;
+
+    preprocessImageAndloadModelTimes.forEach(time => {
+        sum = sum + time;
+    });
+    returnedArray.push(sum/preprocessImageAndloadModelTimes.length);
+    sum = 0;
+
+    console.log(returnedArray);
+
+    return returnedArray;
 }
 
-function computeAccuracy2(scores){
+function computeAccuracy2(){
     var sum = 0;
     scores.forEach(score => {
         if(score >= 0.5) {
@@ -90,10 +136,10 @@ function runAccuracy() {
     // console.log(accuracyCat2)
 
     // DOG
-    var accuracy = computeAccuracy1(scores, "dog");
+    var accuracy = computeAccuracy1();
     console.log("accuracy")
     console.log(accuracy)
-    var accuracy2 = computeAccuracy2(scores, "dog");
+    var accuracy2 = computeAccuracy2();
     console.log("accuracy2")
     console.log(accuracy2)
 }

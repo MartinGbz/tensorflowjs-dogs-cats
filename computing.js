@@ -1,7 +1,12 @@
 let model;
 
+var start;
+var end;
+var loadLayersModelTime;
+var preprocessSimplifiedTime;
+var predictTime;
+
 async function predictImg(img){
-    console.time('loadLayersModel');
     // can't do that because of the image hasn't the time to be built. So the model loading enable the program to wait.
     // not optimal at all => need to fix it
     // if(!model) {
@@ -11,16 +16,35 @@ async function predictImg(img){
     //     console.log("model already loaded");
     //     console.log(model);
     // }
+    start = window.performance.now();
     model = await tf.loadLayersModel('./models/model4/model.json');
-    console.timeEnd('loadLayersModel');
-    console.time('preprocessSimplified');
+    end = window.performance.now();
+
+    loadLayersModelTime = end - start;
+    console.log('loadLayersModelTime')
+    console.log(loadLayersModelTime)
+
+
+    start = window.performance.now();
     const imgFormatted = preprocessSimplified(img);
-    console.timeEnd('preprocessSimplified');
-    console.time('predict');
+    end = window.performance.now();
+
+    preprocessSimplifiedTime = end - start;
+    console.log('preprocessSimplifiedTime')
+    console.log(preprocessSimplifiedTime)
+
+
+    start = window.performance.now();
     const prediction = model.predict(imgFormatted).dataSync()
-    console.timeEnd('predict');
+    end = window.performance.now();
+
+    predictTime = end - start;
+    console.log('predictTime')
+    console.log(predictTime)
+
+
     const score = prediction[0]
-    return score;
+    return [score,loadLayersModelTime, preprocessSimplifiedTime, predictTime];
     // displayResult(score)
 }
 
