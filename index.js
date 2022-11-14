@@ -15,7 +15,7 @@ var preprocessImageAndloadModelTimes = [];
 var data = [];
 
 window.onload = function afterWebPageLoad() {
-    let uploadBtn = document.getElementById("directory-upload");
+    let uploadBtn = document.getElementById("dogs-upload-folder");
     uploadBtn.addEventListener("change", async (e) => {
         // => parallel
         // e.target.files.forEach(async image => {
@@ -38,6 +38,7 @@ window.onload = function afterWebPageLoad() {
             preprocessImageTimes.push(data[2]);
             predictTimes.push(data[3]);
             preprocessImageAndloadModelTimes.push(data[2]+data[3]);
+
         }
         console.log("scores")
         console.log(scores)
@@ -48,15 +49,14 @@ window.onload = function afterWebPageLoad() {
     }, false);
 
 
-    let uploadCatBtn = document.getElementById("directory-upload-cat");
+    let uploadCatBtn = document.getElementById("cats-upload-folder");
     uploadCatBtn.addEventListener("change", async (e) => {
+        firstTime = true;
         for (const image of e.target.files) {
             console.log(image);
             cur = document.createElement('img')
             cur.src = URL.createObjectURL(image);
             data = await predictImg(cur);
-
-            // score = 1 - score;
 
             scores.push(1-data[0]);
             loadModelTimes.push(data[1]);
@@ -69,54 +69,67 @@ window.onload = function afterWebPageLoad() {
     }, false);
 }
 
-function computeAccuracy1(){
+
+/**
+ * 
+ * @returns
+ * [0] => scores
+ * [1] => model loading time average
+ * [2] => preprocessing image time average
+ * [3] => predict time average
+ * [4] => preprocessing image time average + predict time average
+ * [5] => first model loading time
+ * [5] => first image prediction time
+ */
+function computeAverage1(){
+    console.log("computeAverage1")
+
     var returnedArray = [];
     
     var sum = 0;
 
-    console.log("computeAccuracy1")
-    console.log(scores)
-    console.log(loadModelTimes)
-    console.log(preprocessImageTimes)
-    console.log(predictTimes)
-    console.log(preprocessImageAndloadModelTimes)
-
+    // scores
     scores.forEach(score => {
         sum = sum + score;
     });
     returnedArray.push(sum/scores.length);
     sum = 0;
 
+    // model loading
     loadModelTimes.forEach(time => {
         sum = sum + time;
     });
     returnedArray.push(sum/loadModelTimes.length);
     sum = 0;
 
+    // preprocessing
     preprocessImageTimes.forEach(time => {
         sum = sum + time;
     });
     returnedArray.push(sum/preprocessImageTimes.length);
     sum = 0;
 
+    // predict
     predictTimes.forEach(time => {
         sum = sum + time;
     });
     returnedArray.push(sum/predictTimes.length);
     sum = 0;
 
+    // preprocessing + predict
     preprocessImageAndloadModelTimes.forEach(time => {
         sum = sum + time;
     });
     returnedArray.push(sum/preprocessImageAndloadModelTimes.length);
     sum = 0;
 
-    console.log(returnedArray);
+    returnedArray.push(firstLayersModelLoadingTime);
+    returnedArray.push(firstImagePredictionLoadingTime);
 
     return returnedArray;
 }
 
-function computeAccuracy2(){
+function computeAverage2(){
     var sum = 0;
     scores.forEach(score => {
         if(score >= 0.5) {
@@ -126,22 +139,22 @@ function computeAccuracy2(){
     return sum/scores.length;
 }
 
-function runAccuracy() {
-    // CAT
-    // var accuracyCat1 = computeAccuracy1(scores, "cat");
-    // console.log("accuracyCat1")
-    // console.log(accuracyCat1)
-    // var accuracyCat2 = computeAccuracy2(scores, "cat");
-    // console.log("accuracyCat2")
-    // console.log(accuracyCat2)
+function runAverage() {
+    var average = computeAverage1();
+    console.log("average")
+    console.log(average)
 
-    // DOG
-    var accuracy = computeAccuracy1();
-    console.log("accuracy")
-    console.log(accuracy)
-    var accuracy2 = computeAccuracy2();
-    console.log("accuracy2")
-    console.log(accuracy2)
+    document.getElementById("scoreAverage").innerHTML = average[0]
+    document.getElementById("loadModelAverage").innerHTML = average[1]
+    document.getElementById("preprocessImageTimeAverage").innerHTML = average[2]
+    document.getElementById("predictTimeAverage").innerHTML = average[3]
+    document.getElementById("preprocessImageAndloadModelTimeAverage").innerHTML = average[4]
+    document.getElementById("firstModelLoadingTime").innerHTML = average[5]
+    document.getElementById("firstImagePredictionLoadingTime").innerHTML = average[6]
+
+    var average2 = computeAverage2();
+    console.log("average2")
+    console.log(average2)
 }
 
 function displayResult(score){

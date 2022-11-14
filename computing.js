@@ -6,6 +6,19 @@ var loadLayersModelTime;
 var preprocessSimplifiedTime;
 var predictTime;
 
+var firstTime = true;
+var firstLayersModelLoadingTime;
+var firstImagePredictionLoadingTime;
+
+/**
+ * 
+ * @param img image to predict
+ * @returns array that contains : 
+ * [0] => score
+ * [1] => model loading time
+ * [2] => preprocessing image time
+ * [3] => predict time
+ */
 async function predictImg(img){
     // can't do that because of the image hasn't the time to be built. So the model loading enable the program to wait.
     // not optimal at all => need to fix it
@@ -44,8 +57,21 @@ async function predictImg(img){
 
 
     const score = prediction[0]
-    return [score,loadLayersModelTime, preprocessSimplifiedTime, predictTime];
-    // displayResult(score)
+    console.log('score')
+    console.log(score)
+
+    if(firstTime) {
+        firstLayersModelLoadingTime = loadLayersModelTime;
+        firstImagePredictionLoadingTime = predictTime;
+        firstTime = false;
+    }
+
+    console.log('firstLayersModelLoadingTime');
+    console.log(firstLayersModelLoadingTime);
+    console.log('firstImagePredictionLoadingTime');
+    console.log(firstImagePredictionLoadingTime);
+
+    return [score, loadLayersModelTime, preprocessSimplifiedTime, predictTime];
 }
 
 function preprocess(img)

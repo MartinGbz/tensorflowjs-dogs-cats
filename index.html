@@ -14,18 +14,48 @@
         <div>
             <input type="file" id="file-upload"/>
             <img id="cur-img">
-            <!-- <script type="module" src="index.js"></script> -->
         </div>
         <hr/>
         <p> Multiple predictions (dogs) </p>
         <div>
-            <input type="file" id="directory-upload" webkitdirectory multiple>
+            <input type="file" id="dogs-upload-folder" webkitdirectory multiple>
         </div>
         <p> Multiple predictions (cats) </p>
         <div>
-            <input type="file" id="directory-upload-cat" webkitdirectory multiple>
+            <input type="file" id="cats-upload-folder" webkitdirectory multiple>
         </div>
         <p id="result"></p>
-        <button onclick="runAccuracy()">Run accuracy</button>
+        <button onclick="runAverage()">Run Average</button>
+        <div style="border-top: 10px solid white; margin-top: 10px;"></div>
+
+        
+        <p> Preprocessing image time Average</p>
+        <p class="value" id="preprocessImageTimeAverage"></p>
+        <div style="border-top: 2px solid white;"></div>
+        
+        <p> Predict time Average</p>
+        <p class="value" id="predictTimeAverage"></p>
+        <div style="border-top: 2px solid white;"></div>
+        
+        <p> Preprocessing image and load model time Average</p>
+        <p class="value" id="preprocessImageAndloadModelTimeAverage"></p>
+        <div style="border-top: 2px solid white;"></div>
+        
+        <p> First image prediction time</p>
+        <p class="value" id="firstImagePredictionLoadingTime"></p>
+        <div style="border-top: 10px solid white;"></div>
+        
+        
+        <p> Model loading time Average</p>
+        <p class="value" id="loadModelAverage"></p>
+        <div style="border-top: 2px solid white;"></div>
+        
+        <p> First model loading time</p>
+        <p class="value" id="firstModelLoadingTime"></p>
+        <div style="border-top: 10px solid white;"></div>
+        
+        
+        <p> Score Average</p>
+        <p class="value" id="scoreAverage"></p>
     </body>
 </html>
