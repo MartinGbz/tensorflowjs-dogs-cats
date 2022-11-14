@@ -51,7 +51,6 @@ window.onload = function afterWebPageLoad() {
 
     let uploadCatBtn = document.getElementById("cats-upload-folder");
     uploadCatBtn.addEventListener("change", async (e) => {
-        firstTime = true;
         for (const image of e.target.files) {
             console.log(image);
             cur = document.createElement('img')
