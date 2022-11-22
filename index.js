@@ -3,8 +3,8 @@ window.onload = function afterWebPageLoad() {
     let uploadBtn = document.getElementById("file-upload");
     uploadBtn.addEventListener("change", (e) => {
         curImg.src = URL.createObjectURL(e.target.files[0]);
-        predictImg(curImg);
-        //predictOnnx(curImg);
+        //predictImg(curImg);
+        predictOnnx(curImg);
     }, false);
 }
 
